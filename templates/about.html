@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>About Me</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+</head>
+<body>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/about" class="active">About</a>
+  </nav>
+
+  <main class="about-page">
+    <section class="intro">
+      <h1>About Me</h1>
+      <p>Hello! I’m Your Name, a Go developer who loves building interactive UIs with HTMX.</p>
+    </section>
+
+    <section class="skills">
+      <h2>Skills</h2>
+      <ul>
+        <li>Go / REST APIs</li>
+        <li>htmx for declarative interactivity</li>
+        <li>HTML &amp; CSS (Tailwind-ready!)</li>
+        <li>CI/CD &amp; Docker Deployment</li>
+      </ul>
+    </section>
+
+    <section class="contact">
+      <h2>Get in Touch</h2>
+      <form
+        hx-post="/api/contact"
+        hx-trigger="submit"
+        hx-target="#contact-response"
+        hx-swap="innerHTML">
+        <label>
+          Your Email:
+          <input type="email" name="email" required>
+        </label>
+        <label>
+          Message:
+          <textarea name="message" rows="3" required></textarea>
+        </label>
+        <button type="submit">Send Message</button>
+      </form>
+      <div id="contact-response"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Your Name</p>
+  </footer>
+</body>
+</html>
+
