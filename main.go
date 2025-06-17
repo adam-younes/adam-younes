@@ -32,6 +32,12 @@ func main() {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})
+	mux.HandleFunc("/about/", func(w http.ResponseWriter, r *http.Request) {
+		if err := tmpl.ExecuteTemplate(w, "about.html", nil); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+	})
+
 
 	// HTMX endpoint for current time
 	mux.HandleFunc("/api/time", func(w http.ResponseWriter, r *http.Request) {

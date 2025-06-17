@@ -39,11 +39,11 @@ jobs:
 
   deploy:
     name: Deploy to server
-    runs-on: ubuntu-latest
     needs: build
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code (so static/ & templates/ exist)
+      - name: Checkout code (for static/ & templates/)
         uses: actions/checkout@v4
 
       - name: Download build artifact
@@ -63,12 +63,25 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rsync openssh-client
 
-      - name: Sync binary, static & templates
+      - name: Sync static assets & templates
         run: |
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
-            adam-younes static/ templates/ \
+            static/ templates/ \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.APP_DIR }}
+
+      - name: Deploy binary into /usr/local/bin
+        run: |
+          # copy into /tmp on the server
+          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            adam-younes \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/adam-younes.new
+
+          # atomically move & set exec perms
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            sudo mv /tmp/adam-younes.new /usr/local/bin/adam-younes && \
+            sudo chmod +x /usr/local/bin/adam-younes
 
       - name: Restart Go service on server
         run: |
