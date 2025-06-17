@@ -9,11 +9,12 @@ jobs:
   build:
     name: Build & Test
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Go
+      - name: Set up Go 1.24
         uses: actions/setup-go@v4
         with:
           go-version: '1.24'
@@ -23,11 +24,12 @@ jobs:
           go fmt ./...
           go vet ./...
 
-      - name: Run tests
+      - name: Run unit tests
         run: go test ./... -v
 
       - name: Build Linux binary
-        run: GOOS=linux GOARCH=amd64 go build -o adam-younes .
+        run: |
+          GOOS=linux GOARCH=amd64 go build -o adam-younes
 
       - name: Archive build artifact
         uses: actions/upload-artifact@v4
@@ -37,18 +39,16 @@ jobs:
 
   deploy:
     name: Deploy to server
-    needs: build
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    needs: build
 
+    steps:
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: adam-younes
 
-      - name: Set up SSH key
+      - name: Prepare SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" | base64 -d > ~/.ssh/id_rsa
@@ -60,20 +60,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y rsync openssh-client
 
-      - name: Sync to server
+      - name: Sync binary, static & templates
         run: |
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
             adam-younes static/ templates/ \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.APP_DIR }}
 
-      - name: Restart Go service
+      - name: Restart Go service on server
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             sudo systemctl restart adam-younes
 
-      - name: Reload Caddy
+      - name: Reload Caddy to pick up any config or static changes
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
