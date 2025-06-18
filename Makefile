@@ -25,4 +25,3 @@ fmt:
 # Run Go tests (if any)
 test:
 	go test ./...
-

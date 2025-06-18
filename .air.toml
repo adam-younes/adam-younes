@@ -1,0 +1,26 @@
+# .air.toml
+root = "."
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o adam-younes main.go"
+bin = "adam-younes"
+
+[log]
+time = false
+
+[live_reload]
+enable = true      # must be true
+port = 35729       # default livereload port
+
+[include]
+ext = ["go", "html", "css"]
+
+[proxy]
+  # Turn on the HTTP proxy + live-reload server
+  enabled    = true
+  # The port you’ll browse to (your “front-door”)
+  proxy_port = 3000
+  # The port your Go app listens on
+  app_port   = 8080
+
