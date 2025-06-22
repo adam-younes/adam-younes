@@ -1,26 +1,29 @@
-# .air.toml
-root = "."
+root    = "."
 tmp_dir = "tmp"
 
+# Turn on polling (in case your FS events aren’t firing)
+poll = true                                        # :contentReference[oaicite:0]{index=0}
+
 [build]
-cmd = "go build -o adam-younes main.go"
-bin = "adam-younes"
+cmd         = "go build -o adam-younes main.go"
+bin         = "adam-younes"
+# watch .go, .html AND .css
+include_ext = ["go", "html", "css"]               # :contentReference[oaicite:1]{index=1}
+# explicitly watch both your templates and static folders
+include_dir = ["templates", "static"]             # :contentReference[oaicite:2]{index=2}
+kill_mode    = "signal"         # send signal to process
+kill_signal  = "SIGTERM"        # try TERM first
+kill_timeout = "2s"             # wait up to 2 seconds, then SIGKILL
 
 [log]
 time = false
 
 [live_reload]
-enable = true      # must be true
-port = 35729       # default livereload port
-
-[include]
-ext = ["go", "html", "css"]
+enable = true
+port   = 35729
 
 [proxy]
-  # Turn on the HTTP proxy + live-reload server
-  enabled    = true
-  # The port you’ll browse to (your “front-door”)
-  proxy_port = 3000
-  # The port your Go app listens on
-  app_port   = 8080
+enabled    = true
+proxy_port = 3000
+app_port   = 8080
 

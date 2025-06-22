@@ -1,0 +1,35 @@
+.hero { 
+    text-align:center; 
+    padding:2rem 1rem; 
+    display: flex;
+
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.hero-text {
+    display: flex;
+    flex-direction: column;
+    color: #FFC800;
+}
+
+.subtitle {
+    font-family: "FiraCode", sans-serif;
+    font-size: 18pt;
+    margin: 0;
+}
+
+.pixel-art { 
+    width: 256px; 
+    height: 256px; 
+}
+
+.title {
+    font-family: "Pixelify Sans";
+    font-optical-sizing: auto;
+    font-weight: 2;
+    font-style: normal;
+    font-size: 82pt;
+    margin: 0;
+}

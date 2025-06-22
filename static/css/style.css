@@ -2,11 +2,12 @@ body {
     font-family: sans-serif;
     margin:0;
     padding:0; 
-    background:#6f0f16; 
+    color: #fff;
+    background:#222034; 
 }
 
 nav { 
-    background:#0f0f16; 
+    background:#222034; 
     color:#fff; 
     padding:1rem; 
 }
@@ -17,10 +18,6 @@ nav a {
     text-decoration:none; 
 }
 
-.hero { 
-    text-align:center; 
-    padding:4rem 1rem; 
-}
 
 footer { 
     text-align:center; 
@@ -31,4 +28,9 @@ footer {
 .pixel-art {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
+}
+
+.text-shadow {
+    -webkit-filter:  drop-shadow(0px 0px 20px #040308);
+    filter: drop-shadow(0px 0px 20px #040308);
 }
