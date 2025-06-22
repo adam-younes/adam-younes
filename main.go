@@ -1,60 +1,80 @@
 package main
 
 import (
+	"bytes"
 	"embed"
 	"html/template"
+	"io/fs"
 	"log"
 	"net/http"
-	"time"
 )
 
-// embed everything under templates/ and static/css/
-//go:embed templates/* static/css/*
+//go:embed templates/base.html
+//go:embed templates/elements/*
+//go:embed templates/pages/*
+//go:embed static/css/*
+//go:embed static/assets/*
 var assets embed.FS
 
-var tmpl = template.Must(template.ParseFS(assets, "templates/*.html"))
+var tmpl *template.Template
+
+func init() {
+	// FS rooted at ./templates/
+	tplFS, err := fs.Sub(assets, "templates")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	tmpl = template.Must(template.ParseFS(
+		tplFS,
+		"base.html",
+		"elements/*.html",
+		"pages/*.html",
+		))
+}
+
+type PageData struct {
+	Title   string
+	Content template.HTML
+}
+
+func render(w http.ResponseWriter, contentTmpl, title string) {
+	var buf bytes.Buffer
+	if err := tmpl.ExecuteTemplate(&buf, contentTmpl, nil); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	data := PageData{
+		Title:   title,
+		Content: template.HTML(buf.String()),
+	}
+	if err := tmpl.ExecuteTemplate(w, "base", data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+type PageHandler struct {
+	Template string
+	Title    string
+}
+
+func (p PageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	render(w, p.Template, p.Title)
+}
 
 func main() {
 	mux := http.NewServeMux()
+	staticFS, err := fs.Sub(assets, "static")
+	if err != nil {
+		log.Fatal(err)
+	}
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 
-	// Serve CSS (and any other static files you add there)
-	mux.Handle("/static/", http.FileServer(http.FS(assets)))
+	mux.Handle("/", PageHandler{"indexContent", "Home"})
 
-	// Landing page
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if err := tmpl.ExecuteTemplate(w, "index.html", nil); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	})
-	// About page
-	mux.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
-		if err := tmpl.ExecuteTemplate(w, "about.html", nil); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	})
-	mux.HandleFunc("/about/", func(w http.ResponseWriter, r *http.Request) {
-		if err := tmpl.ExecuteTemplate(w, "about.html", nil); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-	})
-
-
-	// HTMX endpoint for current time
-	mux.HandleFunc("/api/time", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		now := time.Now().Format("Mon, 02 Jan 2006 15:04:05 MST")
-		// return just the fragment that HTMX will swap into <div id="time">
-		w.Write([]byte(now))
-	})
-	// HTMX contact handler (just echoes back for demo)
-	mux.HandleFunc("/api/contact", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		r.ParseForm()
-		email := template.HTMLEscapeString(r.FormValue("email"))
-		msg   := template.HTMLEscapeString(r.FormValue("message"))
-		response := "<p>Thanks, " + email + "!<br>Your message: “" + msg + "” has been received.</p>"
-		w.Write([]byte(response))
-	})
+	mux.Handle("/about", PageHandler{"aboutContent", "About Me"})
+	mux.Handle("/about/", PageHandler{"aboutContent", "About Me"})
 
 	log.Println("Listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", mux))

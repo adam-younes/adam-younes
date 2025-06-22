@@ -1,0 +1,32 @@
+{{ define "aboutContent" }}
+<section class="intro">
+    <h1>About Me</h1>
+    <p>Hello! I’m Your Name…</p>
+</section>
+
+<section class="skills">
+    <h2>Skills</h2>
+    <ul>…</ul>
+</section>
+
+<section class="contact">
+    <h2>Get in Touch</h2>
+    <form
+        hx-post="/api/contact"
+        hx-trigger="submit"
+        hx-target="#contact-response"
+        hx-swap="innerHTML">
+        <label>
+            Your Email:
+            <input type="email" name="email" required>
+        </label>
+        <label>
+            Message:
+            <textarea name="message" rows="3" required></textarea>
+        </label>
+        <button type="submit">Send Message</button>
+    </form>
+    <div id="contact-response"></div>
+</section>
+{{ end }}
+
