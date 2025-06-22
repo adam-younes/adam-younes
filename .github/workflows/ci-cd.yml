@@ -70,28 +70,26 @@ jobs:
             static/ templates/ \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.APP_DIR }}
 
-      - name: Deploy binary into /usr/local/bin
+      - name: Deploy binary & set perms
         run: |
-          # Copy the new binary into /tmp on the server
           scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
             adam-younes \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/adam-younes.new
 
-          # Atomically move & set exec perms (requires passwordless sudo)
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            sudo mv /tmp/adam-younes.new /usr/local/bin/adam-younes && \
-            sudo chmod +x /usr/local/bin/adam-younes
+            "sudo mv /tmp/adam-younes.new /usr/local/bin/adam-younes \
+             && sudo chmod +x /usr/local/bin/adam-younes"
 
       - name: Restart Go service on server
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            sudo systemctl restart adam-younes
+            "sudo systemctl restart adam-younes"
 
       - name: Reload Caddy to pick up any config or static changes
         run: |
           ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            sudo systemctl reload caddy
+            "sudo systemctl reload caddy"
 
