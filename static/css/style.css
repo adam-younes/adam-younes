@@ -1,5 +1,43 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'SFMonoRegular';
+    src: url('../fonts/SFMonoRegular.otf') format('opentype'),
+        url('../fonts/SFMonoRegular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Bitmgothic';
+    src: url('../fonts/Bitmgothic/Bitmgothic.otf') format('opentype'),
+        url('../fonts/Bitmgothic/Bitmgothic.ttf') format('truetype'),
+        url('../fonts/Bitmgothic/Bitmgothic.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'EXE';
+    src: url('../fonts/exe/EXEPixelPerfect.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'SnapItMono';
+    src: url('../fonts/snap-it/Snap-itmono-1.6-Regular.otf') format('opentype'),
+        url('../fonts/snap-it/Snap-itmono-1.6-Regular.woff') format('woff'), 
+        url('../fonts/snap-it/Snap-itmono-1.6-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 body {
-    font-family: sans-serif;
     margin:0;
     padding:0; 
     color: #fff;
@@ -13,24 +51,17 @@ nav {
 }
 
 nav a { 
-    color:#fff; 
+    color:#F4EBD4; 
     margin-right:1rem; 
     text-decoration:none; 
 }
 
-
-footer { 
-    text-align:center; 
-    padding:2rem 1rem; 
-    background:#f5f5f5; 
+nav a:hover {
+    color: #FFC800;
+    text-decoration:underline;
 }
 
 .pixel-art {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
-}
-
-.text-shadow {
-    -webkit-filter:  drop-shadow(0px 0px 20px #040308);
-    filter: drop-shadow(0px 0px 20px #040308);
 }

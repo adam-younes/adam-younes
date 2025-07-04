@@ -1,32 +1,21 @@
 {{ define "aboutContent" }}
-<section class="intro">
-    <h1>About Me</h1>
-    <p>Hello! I’m Your Name…</p>
-</section>
+<div class="flex flex-col items-center justify-center text-[#FFC800]">
+    <h1 class="text-[54pt] font-[Reem_Kufi]">about me</h1>
+    <section>
+        <div class="flex flex-row">
+            <div class="w-px bg-[#FFC800] mx-8"></div>
+            <p class="font-[SnapItMono] text-[28pt]">
+                Hello, my name is Adam Younes, <br/> 
+                I am a Palestinian swe and gamedev. <br/>
+                Welcome to my website.
+            </p>
+        </div>
+    </section>
 
-<section class="skills">
-    <h2>Skills</h2>
-    <ul>…</ul>
-</section>
+    <section class="mt-10 font-[Reem_Kufi] text-[38pt]">
+        <h2>skills</h2>
+    </section>
 
-<section class="contact">
-    <h2>Get in Touch</h2>
-    <form
-        hx-post="/api/contact"
-        hx-trigger="submit"
-        hx-target="#contact-response"
-        hx-swap="innerHTML">
-        <label>
-            Your Email:
-            <input type="email" name="email" required>
-        </label>
-        <label>
-            Message:
-            <textarea name="message" rows="3" required></textarea>
-        </label>
-        <button type="submit">Send Message</button>
-    </form>
-    <div id="contact-response"></div>
-</section>
+</div>
 {{ end }}
 

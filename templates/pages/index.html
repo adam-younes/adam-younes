@@ -1,12 +1,32 @@
 {{ define "indexContent" }}
-<div class="hero">
-    <img src="/static/assets/self-portrait-round-32.png" alt="Logo"
-        class="pixel-art" />
 
-    <div class="hero-text">
-        <h1 class="title text-shadow">Welcome</h1>
-        <p class="subtitle">i am adam, an engineer</p>
+<div class="flex flex-col items-center text-[#FFC800]">
+    <h1 class="m-0 text-[54pt] font-[Reem_Kufi] drop-shadow-lg">— adam younes —</h1>
+
+    <div class="flex space-x-10 align-center">
+        <img
+            src="/static/assets/self-portrait-round-32.png"
+            alt="Portrait"
+            class="
+            w-64
+            [image-rendering:pixelated]
+            [image-rendering:crisp-edges]"
+        />
+        <div class="
+            flex
+            flex-col
+            justify-center
+            space-y-2
+            text-[28pt]
+            font-[SnapItMono]
+            ">
+            <a class="hover:underline" href="/about">about_me</a>
+            <a class="hover:underline" href="/experience">experience</a>
+            <a class="hover:underline" href="/projects">projects</a>
+            <a class="hover:underline" href="/contact">contact</a>
+        </div>
     </div>
+
 </div>
 {{ end }}
 

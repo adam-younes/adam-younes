@@ -14,6 +14,7 @@ import (
 //go:embed templates/pages/*
 //go:embed static/css/*
 //go:embed static/assets/*
+//go:embed static/fonts/*
 var assets embed.FS
 
 var tmpl *template.Template

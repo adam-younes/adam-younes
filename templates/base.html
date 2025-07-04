@@ -4,17 +4,17 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>{{ .Title }}</title>
+        <title>Adam Younes</title>
+        <!-- google fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="/static/css/style.css">
-        <link rel="stylesheet" href="/static/css/index.css">
+        <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=Shippori+Antique+B1&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400..700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/output.css">
         <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     </head>
     <body>
-        {{ template "navbar" . }}
-
         <main>
             {{ .Content }}
         </main>
