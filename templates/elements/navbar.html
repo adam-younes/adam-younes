@@ -1,9 +1,12 @@
 {{ define "navbar" }}
-<nav class="navbar flex gap-10 font-[SnapItMono] text-[30pt] justify-center">
-    <a href="/" class="navlink home">Home</a>
-    <a href="/about" class="navlink about">About</a>
-    <a href="/projects" class="navlink projects">Projects</a>
-    <a href="/experience" class="navlink experience">Experience</a>
-</nav>
+<div class="flex flex-col justify-center items-center pt-3">
+    <nav class="navbar flex gap-10 font-[SnapItMono] text-[28pt] justify-center text-[#FFC800]">
+        <a href="/"           class="hover:underline">home</a>
+        <a href="/about"      class="hover:underline">about_me</a>
+        <a href="/projects"   class="hover:underline">projects</a>
+        <a href="/experience" class="hover:underline">experience</a>
+    </nav>
+    <div class="h-px w-[80%] mt-5 bg-[#FFC800]"></div>
+</div>
 {{ end }}
 

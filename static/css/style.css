@@ -44,23 +44,6 @@ body {
     background:#222034; 
 }
 
-nav { 
-    background:#222034; 
-    color:#fff; 
-    padding:1rem; 
-}
-
-nav a { 
-    color:#F4EBD4; 
-    margin-right:1rem; 
-    text-decoration:none; 
-}
-
-nav a:hover {
-    color: #FFC800;
-    text-decoration:underline;
-}
-
 .pixel-art {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
