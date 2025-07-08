@@ -1,0 +1,11 @@
+{{ define "project" }}
+<article class="p-6 bg-[#2C3033] rounded-md shadow-md hover:shadow-xl transition-shadow hover:rounded-xl">
+  <h3 class="text-2xl font-bold mb-2">
+    <a href="{{ .Link }}" target="_blank" class="hover:underline">
+      {{ .Title }}
+    </a>
+  </h3>
+  <p class="text-base mb-4">{{ .Description }}</p>
+</article>
+{{ end }}
+

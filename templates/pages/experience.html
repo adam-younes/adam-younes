@@ -1,0 +1,26 @@
+{{ define "experienceContent" }}
+
+{{ template "navbar" . }}
+
+<!-- Page heading -->
+<div class="mt-10 text-center">
+    <h2 class="text-4xl font-[Raleway] text-[#DEE2E6]">Experience</h2>
+</div>
+
+<!-- Grid of cards -->
+<div class="mt-8 grid gap-6
+    pr-[5vw]
+    pl-[5vw]
+    grid-cols-1 
+    font-[Raleway] text-[#DEE2E6]
+    sm:grid-cols-2 
+    lg:grid-cols-3">
+
+    {{- range .Experience }}
+    {{ template "experience" . }}
+    {{- end }}
+
+</div>
+
+{{ end }}
+

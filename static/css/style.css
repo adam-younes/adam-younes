@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+:root {
+    color: var(--text-dark);
+}
+
 @font-face {
     font-family: 'SFMonoRegular';
     src: url('../fonts/SFMonoRegular.otf') format('opentype'),
@@ -41,7 +45,7 @@ body {
     margin:0;
     padding:0; 
     color: #fff;
-    background:#222034; 
+    background:#212529; 
 }
 
 .pixel-art {
