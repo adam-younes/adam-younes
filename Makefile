@@ -1,7 +1,7 @@
 BINARY := adam-younes
 
 # Default target
-all: build
+all: run
 
 # Build the binary with version info (if using git tags)
 build:
