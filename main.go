@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"strings"
 	"github.com/adam-younes/adam-younes/models"
 )
 
@@ -74,6 +75,9 @@ func main() {
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
 
 	mux.Handle("/", PageHandler{"indexContent", "Home"})
+
+	mux.HandleFunc("/notes", notesHandler)
+	mux.HandleFunc("/notes/", notesHandler)
 
 	mux.Handle("/about", PageHandler{"aboutContent", "About Me"})
 
@@ -156,3 +160,103 @@ func listExperience(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type NoteSection struct {
+   ID      string
+   Title   string
+   Content template.HTML
+}
+type NoteChapter struct {
+   Title    string
+   Sections []NoteSection
+}
+type BookData struct {
+   Slug     string
+   Title    string
+   Chapters []NoteChapter
+}
+type Category struct {
+   Slug  string
+   Title string
+}
+type NotesPageData struct {
+   Categories  []Category
+   CurrentSlug string       // empty on /notes
+   Book        *BookData    // nil on /notes
+}
+
+var allCategories = []Category{
+  {Slug: "software",     Title: "Software"},
+  {Slug: "math",         Title: "Math"},
+  {Slug: "science",      Title: "Science"},
+  {Slug: "example-book", Title: "The Go Primer"},  // ← add this
+}
+// in main.go, replace or append to your allBooks:
+var allBooks = []BookData{
+  {
+    Slug:  "example-book",
+    Title: "The Go Primer",
+    Chapters: []NoteChapter{
+      {
+        Title: "Chapter 1: Getting Started",
+        Sections: []NoteSection{
+          {
+            ID:      "example-intro",
+            Title:   "Introduction",
+            Content: `<p>Go (or Golang) is an open-source, statically typed language designed at Google. It's great for building fast, concurrent services and command-line tools.</p>`,
+          },
+          {
+            ID:      "example-install",
+            Title:   "Installation",
+            Content: `<p>Download the binary from <a href="https://golang.org/dl/">golang.org/dl</a> and follow the installer for your OS. After installing, verify with <code>go version</code>.</p>`,
+          },
+        },
+      },
+      {
+        Title: "Chapter 2: Core Concepts",
+        Sections: []NoteSection{
+          {
+            ID:      "example-variables",
+            Title:   "Variables & Types",
+            Content: `<p>Declare variables with <code>var x int</code> or use the shorthand <code>x := 42</code>. Go has built-in types like <code>int</code>, <code>string</code>, <code>bool</code>, plus slices, maps, structs, and more.</p>`,
+          },
+          {
+            ID:      "example-functions",
+            Title:   "Functions",
+            Content: `<p>Functions are first-class. Declare with <code>func add(a, b int) int { return a + b }</code>. Multiple return values are supported: <code>func swap(a, b string) (string, string)</code>.</p>`,
+          },
+        },
+      },
+    },
+  },
+}
+
+func notesHandler(w http.ResponseWriter, r *http.Request) {
+   slug := strings.TrimPrefix(r.URL.Path, "/notes/")
+   var book *BookData
+   for i := range allBooks {
+     if allBooks[i].Slug == slug {
+       book = &allBooks[i]
+       break
+     }
+   }
+   data := NotesPageData{
+     Categories:  allCategories,
+     CurrentSlug: slug,
+     Book:        book,
+   }
+
+   // render into notesContent
+   var buf bytes.Buffer
+   if err := tmpl.ExecuteTemplate(&buf, "notesContent", data); err != nil {
+     http.Error(w, err.Error(), 500)
+     return
+   }
+   // wrap in base
+   pageData := PageData{
+     Title:   func() string { if book!=nil { return book.Title }; return "Notes" }(),
+     Content: template.HTML(buf.String()),
+   }
+   if err := tmpl.ExecuteTemplate(w, "base", pageData); err != nil {
+     http.Error(w, err.Error(), 500)
+   }
+}

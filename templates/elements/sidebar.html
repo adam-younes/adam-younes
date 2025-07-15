@@ -1,0 +1,42 @@
+{{ define "sidebar" }}
+<nav class="w-64 bg-gray-100 dark:bg-gray-800 p-4 border-r dark:border-gray-700">
+    <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Notes</h2>
+
+    <!-- search bar -->
+    <input
+        id="sidebar-search"
+        type="text"
+        placeholder="🔍 Search…"
+        class="w-full mb-4 px-2 py-1 rounded border dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-gray-100"
+    />
+
+    <ul id="notes-list" class="space-y-2">
+        {{- range .Categories }}
+        <li>
+            <a
+                href="/notes/{{ .Slug }}"
+                class="block px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700
+                {{ if eq $.CurrentSlug .Slug }}bg-gray-300 dark:bg-gray-600 font-bold{{ end }}">
+                {{ .Title }}
+            </a>
+        </li>
+        {{- end }}
+    </ul>
+</nav>
+
+<!-- client-side filter script -->
+<script>
+(function(){
+    const input = document.getElementById('sidebar-search');
+    const listItems = document.querySelectorAll('#notes-list li');
+    input.addEventListener('input', function(){
+        const q = this.value.trim().toLowerCase();
+        listItems.forEach(li => {
+            const text = li.textContent.trim().toLowerCase();
+            li.style.display = text.includes(q) ? '' : 'none';
+        });
+    });
+})();
+</script>
+{{ end }}
+
