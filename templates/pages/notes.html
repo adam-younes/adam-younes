@@ -2,7 +2,7 @@
 {{ template "navbar" . }}
 <div class="flex min-h-screen">
   {{ template "sidebar" . }}
-  <section class="flex-1 p-6 prose dark:prose-invert">
+  <section class="flex-1 p-6 prose">
     {{ if .Book }}
       <h1>{{ .Book.Title }}</h1>
       {{- range .Book.Chapters }}
@@ -17,9 +17,8 @@
         </article>
       {{- end }}
     {{ else }}
-      <p class="text-gray-600 dark:text-gray-400">
-        Select a “book” from the sidebar to view its chapters and sections.
-      </p>
+        <div>
+        </div>
     {{ end }}
   </section>
 </div>

@@ -1,13 +1,12 @@
 {{ define "sidebar" }}
-<nav class="w-64 bg-gray-100 dark:bg-gray-800 p-4 border-r dark:border-gray-700">
-    <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">Notes</h2>
+<nav class="w-64 bg-[#212529] p-4 border-r">
+    <h2 class="text-lg text-[#DEE2E6] font-semibold mb-4">Notes</h2>
 
-    <!-- search bar -->
     <input
         id="sidebar-search"
         type="text"
-        placeholder="🔍 Search…"
-        class="w-full mb-4 px-2 py-1 rounded border dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-gray-100"
+        placeholder="search my notes"
+        class="w-full mb-4 px-2 py-1 rounded border"
     />
 
     <ul id="notes-list" class="space-y-2">
@@ -15,8 +14,8 @@
         <li>
             <a
                 href="/notes/{{ .Slug }}"
-                class="block px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700
-                {{ if eq $.CurrentSlug .Slug }}bg-gray-300 dark:bg-gray-600 font-bold{{ end }}">
+                class="block px-2 py-1 rounded hover:bg-gray-
+                {{ if eq $.CurrentSlug .Slug }}bg-gray-300 font-bold{{ end }}">
                 {{ .Title }}
             </a>
         </li>
@@ -24,7 +23,6 @@
     </ul>
 </nav>
 
-<!-- client-side filter script -->
 <script>
 (function(){
     const input = document.getElementById('sidebar-search');
