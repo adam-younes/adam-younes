@@ -230,6 +230,7 @@ var allBooks = []BookData{
   },
 }
 
+
 func notesHandler(w http.ResponseWriter, r *http.Request) {
    slug := strings.TrimPrefix(r.URL.Path, "/notes/")
    var book *BookData

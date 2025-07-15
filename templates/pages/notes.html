@@ -1,26 +1,30 @@
 {{ define "notesContent" }}
 {{ template "navbar" . }}
 <div class="flex min-h-screen">
-  {{ template "sidebar" . }}
-  <section class="flex-1 p-6 prose">
-    {{ if .Book }}
-      <h1>{{ .Book.Title }}</h1>
-      {{- range .Book.Chapters }}
-        <article class="mt-8">
-          <h2>{{ .Title }}</h2>
-          {{- range .Sections }}
-            <section id="{{ .ID }}" class="mt-4">
-              <h3>{{ .Title }}</h3>
-              <div>{{ .Content }}</div>
+    {{ template "sidebar" . }}
+    <section class="flex-1 p-6 prose prose-lg font-[DM_Mono]">
+        {{ if .Book }}
+        <h1 class="text-center text-[14pt] font-bold mb-4">{{ .Book.Title }}</h1>
+
+        {{- range .Book.Chapters }}
+        <article class="mt-4">
+            <h2 class="text-[12pt] font-semibold mb-6">{{ .Title }}</h2>
+
+            {{- range .Sections }}
+            <section id="{{ .ID }}" class="mt-8">
+                <h3 class="text-[12pt] font-medium mb-4">{{ .Title }}</h3>
+                <div class="ml-8">
+                    {{ .Content }}
+                </div>
             </section>
-          {{- end }}
+            {{- end }}
         </article>
-      {{- end }}
-    {{ else }}
-        <div>
-        </div>
-    {{ end }}
-  </section>
+        {{- end }}
+
+        {{ else }}
+        <div>Select a book from the sidebar to read its notes.</div>
+        {{ end }}
+    </section>
 </div>
 {{ end }}
 
