@@ -24,6 +24,6 @@ port   = 35729
 
 [proxy]
 enabled    = true
-proxy_port = 3000
-app_port   = 8080
+proxy_port = 4000
+app_port   = 9999
 

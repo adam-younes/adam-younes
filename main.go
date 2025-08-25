@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
 	"github.com/adam-younes/adam-younes/models"
 	"github.com/gomarkdown/markdown"
 )
@@ -187,8 +188,8 @@ func main() {
 	mux.Handle("/projects/", 	http.StripPrefix("/projects/", mux))
 	mux.Handle("/about/", 		http.StripPrefix("/about/", mux))
 
-	log.Println("Listening on :8080")
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	log.Println("Listening on :9999")
+	log.Fatal(http.ListenAndServe(":9999", mux))
 }
 
 type ProjectsPageData struct {
