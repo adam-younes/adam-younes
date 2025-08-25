@@ -2,39 +2,78 @@
 <nav class="w-64 bg-[#212529] p-4 border-r">
     <h2 class="text-lg text-[#DEE2E6] font-semibold mb-4">Notes</h2>
 
-    <input
-        id="sidebar-search"
-        type="text"
-        placeholder="search my notes"
-        class="w-full mb-4 px-2 py-1 rounded border"
-    />
+    <form action="/notes" method="GET" class="mb-4">
+        <input
+            id="sidebar-search"
+            name="search"
+            type="text"
+            placeholder="Search notes..."
+            value="{{ .SearchQuery }}"
+            class="w-full px-3 py-2 rounded border bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+    </form>
 
-    <ul id="notes-list" class="space-y-2">
-        {{- range .Categories }}
-        <li>
-            <a
-                href="/notes/{{ .Slug }}"
-                class="block px-2 py-1 rounded hover:bg-gray-
-                {{ if eq $.CurrentSlug .Slug }}bg-gray-300 font-bold{{ end }}">
-                {{ .Title }}
-            </a>
-        </li>
-        {{- end }}
-    </ul>
+    <div class="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
+        {{ if .Items }}
+            {{ template "renderSidebarTree" .Items }}
+        {{ else }}
+            <p class="text-gray-400 text-sm">No notes found</p>
+        {{ end }}
+    </div>
 </nav>
 
 <script>
 (function(){
     const input = document.getElementById('sidebar-search');
-    const listItems = document.querySelectorAll('#notes-list li');
+    const form = input.closest('form');
+    
+    // Auto-submit form on input change
+    let searchTimeout;
     input.addEventListener('input', function(){
-        const q = this.value.trim().toLowerCase();
-        listItems.forEach(li => {
-            const text = li.textContent.trim().toLowerCase();
-            li.style.display = text.includes(q) ? '' : 'none';
-        });
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            form.submit();
+        }, 300);
+    });
+    
+    // Clear search when input is cleared
+    input.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') {
+            input.value = '';
+            form.submit();
+        }
     });
 })();
 </script>
+{{ end }}
+
+{{ define "renderSidebarTree" }}
+{{ range . }}
+<div class="text-gray-300">
+    {{ if .IsDir }}
+    <!-- Directory -->
+    <div class="flex items-center space-x-2 py-1">
+        <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-5l-2-2H5a2 2 0 00-2 2z"></path>
+        </svg>
+        <span class="font-medium">{{ .Name }}</span>
+        <span class="text-xs text-gray-500">({{ len .Children }})</span>
+    </div>
+    {{ if .Children }}
+    <div class="ml-4 mt-1 space-y-1 border-l border-gray-600 pl-3">
+        {{ template "renderSidebarTree" .Children }}
+    </div>
+    {{ end }}
+    {{ else }}
+    <!-- File -->
+    <a href="/notes{{ getRelativePath .Path }}" class="flex items-center space-x-2 py-1 hover:text-white transition-colors">
+        <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <span class="font-medium">{{ .Name }}</span>
+    </a>
+    {{ end }}
+</div>
+{{ end }}
 {{ end }}
 

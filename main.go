@@ -7,8 +7,11 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"github.com/adam-younes/adam-younes/models"
+	"github.com/gomarkdown/markdown"
 )
 
 //go:embed templates/base.html
@@ -28,12 +31,16 @@ func init() {
 		log.Fatal(err)
 	}
 
-	tmpl = template.Must(template.ParseFS(
+	// Create template with custom functions
+	tmpl = template.Must(template.New("").Funcs(template.FuncMap{
+		"getWebPath": getWebPath,
+		"getRelativePath": getRelativePath,
+	}).ParseFS(
 		tplFS,
 		"base.html",
 		"elements/*.html",
 		"pages/*.html",
-		))
+	))
 }
 
 type PageData struct {
@@ -41,18 +48,18 @@ type PageData struct {
 	Content template.HTML
 }
 
-func render(w http.ResponseWriter, contentTmpl, title string) {
+func render(w http.ResponseWriter, contentTmpl, title string, data interface{}) {
 	var buf bytes.Buffer
-	if err := tmpl.ExecuteTemplate(&buf, contentTmpl, nil); err != nil {
+	if err := tmpl.ExecuteTemplate(&buf, contentTmpl, data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	data := PageData{
+	pageData := PageData{
 		Title:   title,
 		Content: template.HTML(buf.String()),
 	}
-	if err := tmpl.ExecuteTemplate(w, "base", data); err != nil {
+	if err := tmpl.ExecuteTemplate(w, "base", pageData); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
@@ -63,7 +70,98 @@ type PageHandler struct {
 }
 
 func (p PageHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	render(w, p.Template, p.Title)
+	render(w, p.Template, p.Title, nil)
+}
+
+// NoteItem represents a file or directory in the notes structure
+type NoteItem struct {
+	Name     string
+	Path     string
+	IsDir    bool
+	Children []NoteItem
+}
+
+// NoteData represents the data for a specific note
+type NoteData struct {
+	Title   string
+	Content template.HTML
+	Path    string
+}
+
+// NotesPageData represents the data for the notes page
+type NotesPageData struct {
+	Items      []NoteItem
+	CurrentNote *NoteData
+	SearchQuery string
+}
+
+// scanNotesDirectory recursively scans the notes directory and builds the structure
+func scanNotesDirectory(rootPath string) ([]NoteItem, error) {
+	var items []NoteItem
+	
+	entries, err := os.ReadDir(rootPath)
+	if err != nil {
+		return nil, err
+	}
+	
+	for _, entry := range entries {
+		item := NoteItem{
+			Name:  entry.Name(),
+			Path:  filepath.Join(rootPath, entry.Name()),
+			IsDir: entry.IsDir(),
+		}
+		
+		if entry.IsDir() {
+			children, err := scanNotesDirectory(item.Path)
+			if err != nil {
+				log.Printf("Error scanning directory %s: %v", item.Path, err)
+				continue
+			}
+			item.Children = children
+		}
+		
+		items = append(items, item)
+	}
+	
+	return items, nil
+}
+
+// getRelativePath returns the path relative to the notes directory
+func getRelativePath(fullPath string) string {
+	notesDir := "static/notes"
+	if strings.HasPrefix(fullPath, notesDir) {
+		return strings.TrimPrefix(fullPath, notesDir)
+	}
+	return fullPath
+}
+
+// getWebPath converts a file system path to a web URL path
+func getWebPath(fsPath string) string {
+	relativePath := getRelativePath(fsPath)
+	if relativePath == "" {
+		return "/notes"
+	}
+	return "/notes" + relativePath
+}
+
+// readMarkdownFile reads and renders a markdown file
+func readMarkdownFile(filePath string) (*NoteData, error) {
+	content, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+	
+	// Convert markdown to HTML
+	html := markdown.ToHTML(content, nil, nil)
+	
+	// Extract title from first heading or use filename
+	title := strings.TrimSuffix(filepath.Base(filePath), filepath.Ext(filePath))
+	
+	return &NoteData{
+		Title:   title,
+		Content: template.HTML(html),
+		Path:    getWebPath(filePath),
+	}, nil
 }
 
 func main() {
@@ -89,7 +187,6 @@ func main() {
 	mux.Handle("/projects/", 	http.StripPrefix("/projects/", mux))
 	mux.Handle("/about/", 		http.StripPrefix("/about/", mux))
 
-
 	log.Println("Listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", mux))
 }
@@ -112,7 +209,7 @@ func listProjects(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	// execute the content template with our ProjectsPageData as “dot”
+	// execute the content template with our ProjectsPageData as "dot"
 	var buf bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buf, "projectsContent", ProjectsPageData{projects}); err != nil {
 		http.Error(w, err.Error(), 500)
@@ -142,7 +239,7 @@ func listExperience(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	// execute the content template with our ExperienceData as “dot”
+	// execute the content template with our ExperienceData as "dot"
 	var buf bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buf, "experienceContent", ExperiencePageData{experience}); err != nil {
 		http.Error(w, err.Error(), 500)
@@ -160,104 +257,75 @@ func listExperience(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type NoteSection struct {
-   ID      string
-   Title   string
-   Content template.HTML
-}
-type NoteChapter struct {
-   Title    string
-   Sections []NoteSection
-}
-type BookData struct {
-   Slug     string
-   Title    string
-   Chapters []NoteChapter
-}
-type Category struct {
-   Slug  string
-   Title string
-}
-type NotesPageData struct {
-   Categories  []Category
-   CurrentSlug string       // empty on /notes
-   Book        *BookData    // nil on /notes
-}
-
-var allCategories = []Category{
-  {Slug: "software",     Title: "Software"},
-  {Slug: "math",         Title: "Math"},
-  {Slug: "science",      Title: "Science"},
-  {Slug: "example-book", Title: "The Go Primer"},  // ← add this
-}
-// in main.go, replace or append to your allBooks:
-var allBooks = []BookData{
-  {
-    Slug:  "example-book",
-    Title: "The Go Primer",
-    Chapters: []NoteChapter{
-      {
-        Title: "Chapter 1: Getting Started",
-        Sections: []NoteSection{
-          {
-            ID:      "example-intro",
-            Title:   "Introduction",
-            Content: `<p>Go (or Golang) is an open-source, statically typed language designed at Google. It's great for building fast, concurrent services and command-line tools.</p>`,
-          },
-          {
-            ID:      "example-install",
-            Title:   "Installation",
-            Content: `<p>Download the binary from <a href="https://golang.org/dl/">golang.org/dl</a> and follow the installer for your OS. After installing, verify with <code>go version</code>.</p>`,
-          },
-        },
-      },
-      {
-        Title: "Chapter 2: Core Concepts",
-        Sections: []NoteSection{
-          {
-            ID:      "example-variables",
-            Title:   "Variables & Types",
-            Content: `<p>Declare variables with <code>var x int</code> or use the shorthand <code>x := 42</code>. Go has built-in types like <code>int</code>, <code>string</code>, <code>bool</code>, plus slices, maps, structs, and more.</p>`,
-          },
-          {
-            ID:      "example-functions",
-            Title:   "Functions",
-            Content: `<p>Functions are first-class. Declare with <code>func add(a, b int) int { return a + b }</code>. Multiple return values are supported: <code>func swap(a, b string) (string, string)</code>.</p>`,
-          },
-        },
-      },
-    },
-  },
-}
-
-
 func notesHandler(w http.ResponseWriter, r *http.Request) {
-   slug := strings.TrimPrefix(r.URL.Path, "/notes/")
-   var book *BookData
-   for i := range allBooks {
-     if allBooks[i].Slug == slug {
-       book = &allBooks[i]
-       break
-     }
-   }
-   data := NotesPageData{
-     Categories:  allCategories,
-     CurrentSlug: slug,
-     Book:        book,
-   }
+	// Extract the path after /notes/
+	requestPath := strings.TrimPrefix(r.URL.Path, "/notes")
+	
+	// Handle search query
+	searchQuery := r.URL.Query().Get("search")
+	
+	// Scan the notes directory
+	notesDir := "static/notes"
+	items, err := scanNotesDirectory(notesDir)
+	if err != nil {
+		log.Printf("Error scanning notes directory: %v", err)
+		http.Error(w, "Error reading notes", http.StatusInternalServerError)
+		return
+	}
+	
+	var currentNote *NoteData
+	
+	// If a specific file is requested, read and render it
+	if requestPath != "" && requestPath != "/" {
+		filePath := filepath.Join(notesDir, requestPath)
+		
+		// Check if file exists and is a markdown file
+		if info, err := os.Stat(filePath); err == nil && !info.IsDir() && strings.HasSuffix(filePath, ".md") {
+			noteData, err := readMarkdownFile(filePath)
+			if err != nil {
+				log.Printf("Error reading markdown file: %v", err)
+				http.Error(w, "Error reading note", http.StatusInternalServerError)
+				return
+			}
+			currentNote = noteData
+		}
+	}
+	
+	// Filter items based on search query if provided
+	if searchQuery != "" {
+		items = filterNotesBySearch(items, searchQuery)
+	}
+	
+	data := NotesPageData{
+		Items:       items,
+		CurrentNote: currentNote,
+		SearchQuery: searchQuery,
+	}
+	
+	// Render the notes page
+	render(w, "notesContent", "Notes", data)
+}
 
-   // render into notesContent
-   var buf bytes.Buffer
-   if err := tmpl.ExecuteTemplate(&buf, "notesContent", data); err != nil {
-     http.Error(w, err.Error(), 500)
-     return
-   }
-   // wrap in base
-   pageData := PageData{
-     Title:   func() string { if book!=nil { return book.Title }; return "Notes" }(),
-     Content: template.HTML(buf.String()),
-   }
-   if err := tmpl.ExecuteTemplate(w, "base", pageData); err != nil {
-     http.Error(w, err.Error(), 500)
-   }
+// filterNotesBySearch recursively filters notes based on search query
+func filterNotesBySearch(items []NoteItem, query string) []NoteItem {
+	var filtered []NoteItem
+	query = strings.ToLower(query)
+	
+	for _, item := range items {
+		// Check if current item matches
+		matches := strings.Contains(strings.ToLower(item.Name), query)
+		
+		// If it's a directory, check children
+		if item.IsDir {
+			filteredChildren := filterNotesBySearch(item.Children, query)
+			if len(filteredChildren) > 0 || matches {
+				item.Children = filteredChildren
+				filtered = append(filtered, item)
+			}
+		} else if matches {
+			filtered = append(filtered, item)
+		}
+	}
+	
+	return filtered
 }
