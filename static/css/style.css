@@ -117,7 +117,7 @@ body {
     margin: 1.5rem 0;
 }
 .prose code {
-    background-color: #f3f4f6;
+    background-color: #111827;
     padding: 0.125rem 0.25rem;
     border-radius: 0.25rem;
     font-family: 'SFMonoRegular', monospace;
@@ -125,7 +125,7 @@ body {
     color: #abacb2; /* Changed from #dc2626 */
 }
 .prose pre {
-    background-color: #1f2937;
+    background-color: #111827;
     color: #abacb2; /* Changed from #f9fafb */
     padding: 1rem;
     border-radius: 0.5rem;
@@ -168,9 +168,9 @@ body {
     color: #abacb2; /* Added explicit color */
 }
 .prose th {
-    background-color: #f9fafb;
+    background-color: #111827;
     font-weight: 600;
-    color: #abacb2; /* Changed from #111827 */
+    color: #abacb2; /* Changed from # */
 }
 .prose img {
     max-width: 100%;
@@ -186,7 +186,8 @@ body {
 /* Math formula styling */
 .prose .math {
     font-family: 'SFMonoRegular', monospace;
-    background-color: #f3f4f6;
+    background-color: #111827;
+
     padding: 0.5rem;
     border-radius: 0.25rem;
     margin: 1rem 0;
