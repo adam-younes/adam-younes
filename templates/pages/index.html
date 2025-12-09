@@ -1,33 +1,31 @@
 {{ define "indexContent" }}
 
-<div class="flex flex-col items-center text-[#abacb2]">
-    <h1 class="text-[20pt] md:text-[38pt] font-[Raleway] text-[#DEE2E6]">— adam younes —</h1>
-    <div class="flex md:flex-row flex-col align-center">
+<div class="flex pt-[20vh] flex-col items-center text-[#abacb2] space-y-8">
+    <!-- Original Content -->
+    <div class="w-full">
+        <h1 class="text-[20pt] md:text-[32pt] font-[SFMonoLight] text-[#DEE2E6] text-center mb-8">— adam younes —</h1>
+    <div class="flex flex-col md:flex-row items-center justify-center gap-8">
         <img
             src="/static/assets/MarbleBust.png"
             alt="Portrait"
             class="
-            w-64
-            md:w-128
+            w-48
+            md:w-96
             h-auto
             object-contain
             [image-rendering:pixelated]
-            [image-rendering:crisp-edges]
-            pt-10
-            md:pt-0"
+            [image-rendering:crisp-edges]"
         />
 
         <div class="
             flex
-            mt-10
-            md:mt-0
             flex-col
             justify-center
             space-y-2
-            text-center
+            text-left
+            gap-3
             text-[20pt]
             font-[Raleway]
-            md:text-left
             md:text-[24pt]
             ">
             <a href="/about"

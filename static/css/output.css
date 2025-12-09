@@ -269,6 +269,9 @@
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
   }
+  .mb-8 {
+    margin-bottom: calc(var(--spacing) * 8);
+  }
   .mb-12 {
     margin-bottom: calc(var(--spacing) * 12);
   }
@@ -335,6 +338,9 @@
   .w-8 {
     width: calc(var(--spacing) * 8);
   }
+  .w-48 {
+    width: calc(var(--spacing) * 48);
+  }
   .w-64 {
     width: calc(var(--spacing) * 64);
   }
@@ -386,11 +392,17 @@
   .justify-center {
     justify-content: center;
   }
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }
   .gap-6 {
     gap: calc(var(--spacing) * 6);
+  }
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
   }
   .gap-10 {
     gap: calc(var(--spacing) * 10);
@@ -414,6 +426,13 @@
       --tw-space-y-reverse: 0;
       margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
       margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
+    }
+  }
+  .space-y-8 {
+    :where(& > :not(:last-child)) {
+      --tw-space-y-reverse: 0;
+      margin-block-start: calc(calc(var(--spacing) * 8) * var(--tw-space-y-reverse));
+      margin-block-end: calc(calc(var(--spacing) * 8) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
   .space-x-2 {
@@ -522,6 +541,9 @@
   .pt-10 {
     padding-top: calc(var(--spacing) * 10);
   }
+  .pt-\[20vh\] {
+    padding-top: 20vh;
+  }
   .pr-\[5vw\] {
     padding-right: 5vw;
   }
@@ -548,6 +570,9 @@
   }
   .font-\[Reem_Kufi\] {
     font-family: Reem Kufi;
+  }
+  .font-\[SFMonoLight\] {
+    font-family: SFMonoLight;
   }
   .font-\[SnapItMono\] {
     font-family: SnapItMono;
@@ -707,20 +732,6 @@
       }
     }
   }
-  .hover\:text-blue-600 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-blue-600);
-      }
-    }
-  }
-  .hover\:text-blue-800 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-blue-800);
-      }
-    }
-  }
   .hover\:text-white {
     &:hover {
       @media (hover: hover) {
@@ -732,14 +743,6 @@
     &:hover {
       @media (hover: hover) {
         text-decoration-line: underline;
-      }
-    }
-  }
-  .hover\:shadow-md {
-    &:hover {
-      @media (hover: hover) {
-        --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
-        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
       }
     }
   }
@@ -788,6 +791,11 @@
       display: none;
     }
   }
+  .md\:w-96 {
+    @media (width >= 48rem) {
+      width: calc(var(--spacing) * 96);
+    }
+  }
   .md\:w-128 {
     @media (width >= 48rem) {
       width: calc(var(--spacing) * 128);
@@ -816,6 +824,11 @@
   .md\:text-\[24pt\] {
     @media (width >= 48rem) {
       font-size: 24pt;
+    }
+  }
+  .md\:text-\[32pt\] {
+    @media (width >= 48rem) {
+      font-size: 32pt;
     }
   }
   .md\:text-\[38pt\] {
@@ -862,6 +875,48 @@
   font-family: 'SnapItMono';
   src: url('../fonts/snap-it/Snap-itmono-1.6-Regular.otf') format('opentype'), url('../fonts/snap-it/Snap-itmono-1.6-Regular.woff') format('woff'), url('../fonts/snap-it/Snap-itmono-1.6-Regular.woff2') format('woff2');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Blastimo';
+  src: url('../fonts/Blastimo.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SFMonoBold';
+  src: url('../fonts/SFMonoBold.otf') format('opentype'), url('../fonts/SFMonoBold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SFMonoHeavy';
+  src: url('../fonts/SFMonoHeavy.otf') format('opentype'), url('../fonts/SFMonoHeavy.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SFMonoLight';
+  src: url('../fonts/SFMonoLight.otf') format('opentype'), url('../fonts/SFMonoLight.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SFMonoMedium';
+  src: url('../fonts/SFMonoMedium.otf') format('opentype'), url('../fonts/SFMonoMedium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'SFMonoSemibold';
+  src: url('../fonts/SFMonoSemibold.otf') format('opentype'), url('../fonts/SFMonoSemibold.woff') format('woff');
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
