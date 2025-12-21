@@ -27,66 +27,11 @@
 
     <section class="mt-6">
         <p class="text-center font-[SnapItMono] text-[12pt] md:text-[20pt]">
-            my name is adam younes, I am a palestinian <br/>
-            software engineer and game developer <br/>
-            welcome to my website.
+            My name is Adam Younes, I am a Palestinian software engineer.
         </p>
-    </section>
-
-    <section class="mt-10 font-[Reem_Kufi] text-[38pt]">
-        <h2 class="text-4xl font-[Raleway] text-[#DEE2E6]">Skills</h2>
-    </section>
-
-    <section class="mt-6 w-full max-w-4xl marquee-wrapper">
-        <div class="marquee font-[SnapItMono] text-[20pt]" id="js-marquee">
-            <span>HTMX</span>
-            <span>Go</span>
-            <span>Rust</span>
-            <span>Python</span>
-            <span>TypeScript</span>
-            <span>C</span>
-            <span>C++</span>
-            <span>Godot</span>
-        </div>
+    
     </section>
 </div>
 
-<script>
-(function() {
-    const marquee = document.getElementById('js-marquee');
-    // duplicate all spans
-    marquee.innerHTML += marquee.innerHTML;
-    // now the total width is twice the original; we'll only scroll half of it.
-    const totalWidth = marquee.getBoundingClientRect().width / 2;
-
-    let offset = 0;
-    const speed = 1.5;
-    let lastTs = null;
-
-    function step(ts) {
-        if (lastTs !== null) {
-            const delta = ts - lastTs;
-            // normalize so speed holds per 60fps: delta/16.67
-            offset -= speed * (delta / 16.67);
-
-            // when we've scrolled an entire copy, jump back
-            if (offset <= -totalWidth) {
-                offset += totalWidth;
-            }
-
-            // apply transform
-            marquee.style.transform = `translateX(${offset}px)`;
-        }
-        lastTs = ts;
-        requestAnimationFrame(step);
-    }
-
-    window.addEventListener('load', () => {
-        // force a reflow so the measurement is correct
-        marquee.getBoundingClientRect();
-        requestAnimationFrame(step);
-    });
-})();
-</script>
 {{ end }}
 
