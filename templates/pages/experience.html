@@ -4,22 +4,20 @@
 
 <!-- Page heading -->
 <div class="mt-10 text-center">
-    <h2 class="text-4xl font-[Raleway] text-[#DEE2E6]">Experience</h2>
+    <h2 class="text-4xl font-[Raleway] text-[var(--color-text-primary)]">Experience</h2>
 </div>
 
-<!-- Grid of cards -->
-<div class="mt-8 grid gap-6
-    pr-[5vw]
-    pl-[5vw]
-    grid-cols-1 
-    font-[Raleway] text-[#DEE2E6]
-    sm:grid-cols-2 
-    lg:grid-cols-3">
-
-    {{- range .Experience }}
-    {{ template "experience" . }}
-    {{- end }}
-
+<!-- Vertical timeline -->
+<div class="mt-12 px-[5vw] font-[Raleway] text-[var(--color-text-primary)]">
+    <div class="relative max-w-3xl mx-auto">
+        <!-- Timeline entries (newest at top, oldest at bottom) -->
+        <!-- Last child's timeline-line is hidden so line doesn't overflow past final node -->
+        <div class="flex flex-col gap-8 [&>*:last-child_.timeline-line]:hidden">
+            {{- range .Experience }}
+            {{ template "experience" . }}
+            {{- end }}
+        </div>
+    </div>
 </div>
 
 {{ end }}
