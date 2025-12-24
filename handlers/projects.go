@@ -16,8 +16,8 @@ func NewProjectsHandler(renderer *Renderer) *ProjectsHandler {
 func (h *ProjectsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	projects := []Project{
 		{
-			Title:       "Calculator",
-			Description: "A terminal based graphing calculator",
+			Title:       "calculator",
+			Description: "I built a graphing calculator in C from scratch for a scholarship competition in high school",
 			Link:        "https://github.com/adam-younes/calculator",
 		},
 		{

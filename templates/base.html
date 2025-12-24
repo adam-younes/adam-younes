@@ -14,12 +14,27 @@
         <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/static/css/output.css">
+        <!-- Syntax highlighting -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     </head>
     <body>
         <main>
             {{ .Content }}
         </main>
+        <script>
+            // Register 'electron' as an alias for 'c' syntax highlighting
+            document.addEventListener('DOMContentLoaded', function() {
+                // Map electron to c language
+                document.querySelectorAll('code.language-electron').forEach(function(block) {
+                    block.classList.remove('language-electron');
+                    block.classList.add('language-c');
+                });
+                // Initialize highlight.js
+                hljs.highlightAll();
+            });
+        </script>
     </body>
 </html>
 {{ end }}

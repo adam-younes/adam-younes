@@ -1,5 +1,5 @@
 {{ define "navbar" }}
-<header class="md:hidden bg-[#161719] text-[#abacb2]">
+<header class="md:hidden bg-[var(--color-bg-navbar)] text-[var(--color-text-secondary)]">
     <div class="max-w-6xl mx-auto flex items-center justify-between p-4">
         <button
             class="md:hidden focus:outline-none"
@@ -13,53 +13,48 @@
         </button>
     </div>
 
-    <div id="nav-menu" class="hidden md:hidden bg-[#161719]">
+    <div id="nav-menu" class="hidden md:hidden bg-[var(--color-bg-navbar)]">
         <nav class="flex flex-col items-center space-y-4 py-4">
             <a href="/"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+                class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
                 Home
             </a>
             <a href="/about"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+                class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
                 About
             </a>
             <a href="/projects"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+                class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
                 Projects
             </a>
             <a href="/experience"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+                class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
                 Experience
             </a>
-            <a href="/notes"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
-                Notes
-            </a>
-
         </nav>
     </div>
 </header>
 
-<div class="flex hidden md:block bg-[#161719] flex-col justify-center items-center pt-1 pb-2">
-    <nav class="navbar flex gap-10 font-[Raleway] font-regular text-[18pt] justify-center text-[#abacb2]">
+<div class="flex hidden md:block bg-[var(--color-bg-navbar)] flex-col justify-center items-center pt-1 pb-2">
+    <nav class="navbar flex gap-10 font-[Raleway] font-regular text-[18pt] justify-center text-[var(--color-text-secondary)]">
         <a href="/"
-            class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+            class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
             Home
         </a>
         <a href="/about"
-            class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+            class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
             About
         </a>
         <a href="/projects"
-            class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+            class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
             Projects
         </a>
         <a href="/experience"
-            class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+            class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
             Experience
         </a>
         <a href="/notes"
-            class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+            class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
             Notes
         </a>
     </nav>

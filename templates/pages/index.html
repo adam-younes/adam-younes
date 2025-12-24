@@ -1,9 +1,9 @@
 {{ define "indexContent" }}
 
-<div class="flex pt-[20vh] flex-col items-center text-[#abacb2] space-y-8">
+<div class="flex pt-[20vh] flex-col items-center text-[var(--color-text-secondary)] space-y-8">
     <!-- Original Content -->
     <div class="w-full">
-        <h1 class="text-[20pt] md:text-[32pt] font-[SFMonoLight] text-[#DEE2E6] text-center mb-8">— adam younes —</h1>
+        <h1 class="text-[20pt] md:text-[32pt] font-[SFMonoLight] text-[var(--color-text-primary)] text-center mb-8">— adam younes —</h1>
     <div class="flex flex-col md:flex-row items-center justify-center gap-8">
         <img
             src="/static/assets/MarbleBust.png"
@@ -21,27 +21,30 @@
             flex
             flex-col
             justify-center
+            items-center
+            md:items-start
             space-y-2
-            text-left
+            text-center
+            md:text-left
             gap-3
             text-[20pt]
             font-[Raleway]
             md:text-[24pt]
             ">
             <a href="/about"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+                class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
                 About
             </a>
             <a href="/projects"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+                class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
                 Projects
             </a>
             <a href="/experience"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+                class="hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
                 Experience
             </a>
             <a href="/notes"
-                class="hover:underline hover:text-[#DEE2E6] transition-colors duration-200 ease-in-out">
+                class="hidden md:block hover:underline hover:text-[var(--color-text-primary)] transition-colors duration-200 ease-in-out">
                 Notes
             </a>
         </div>

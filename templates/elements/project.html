@@ -1,15 +1,17 @@
 {{ define "project" }}
-<article class="p-6 bg-[#2C3033] rounded-md shadow-md hover:shadow-xl transition-shadow hover:rounded-xl overflow-hidden grid grid-rows-2 h-64">
-    <div className="row-span-1 w-full h-full bg-gray-100 dark:bg-gray-800">
-        <img src="/static/assets/MarbleBust.png" class="object-cover w-full h-full">
-    </div>
+<a href="{{ .Link }}" target="_blank" class="block">
+    <article class="p-6 bg-[var(--color-bg-secondary)] rounded-md shadow-md hover:shadow-xl transition-all hover:rounded-xl cursor-pointer">
+        <h3 class="text-2xl font-bold mb-2">{{ .Title }}</h3>
 
-    <h3 class="text-2xl font-bold mb-2">
-        <a href="{{ .Link }}" target="_blank" class="hover:underline">
-            {{ .Title }}
-        </a>
-    </h3>
-    <p class="text-base mb-4">{{ .Description }}</p>
-</article>
+        <div class="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            <span class="hover:underline">{{ .Link }}</span>
+        </div>
+
+        <p class="text-base">{{ .Description }}</p>
+    </article>
+</a>
 {{ end }}
 

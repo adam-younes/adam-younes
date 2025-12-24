@@ -6,9 +6,12 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 )
 
 // Renderer handles template rendering
@@ -86,6 +89,49 @@ func GetWebPath(fsPath string) string {
 	return "/notes" + relativePath
 }
 
+// ExtractTOC extracts table of contents from markdown content
+func ExtractTOC(content []byte) []TOCItem {
+	var items []TOCItem
+
+	contentStr := string(content)
+
+	// Find the "## Table of Contents" section
+	tocHeaderPattern := regexp.MustCompile(`(?mi)^##\s+Table of Contents\s*$`)
+	tocHeaderLoc := tocHeaderPattern.FindStringIndex(contentStr)
+	if tocHeaderLoc == nil {
+		return items
+	}
+
+	// Get content after the TOC header
+	afterHeader := contentStr[tocHeaderLoc[1]:]
+
+	// Find where the TOC section ends (next heading or ---)
+	endPattern := regexp.MustCompile(`(?m)^(##|---)`)
+	endLoc := endPattern.FindStringIndex(afterHeader)
+
+	var tocSection string
+	if endLoc != nil {
+		tocSection = afterHeader[:endLoc[0]]
+	} else {
+		tocSection = afterHeader
+	}
+
+	// Extract links from numbered list items: "1. [Title](#anchor)"
+	linkPattern := regexp.MustCompile(`\[([^\]]+)\]\(([^)]+)\)`)
+	matches := linkPattern.FindAllStringSubmatch(tocSection, -1)
+
+	for _, match := range matches {
+		if len(match) >= 3 {
+			items = append(items, TOCItem{
+				Title:  match[1],
+				Anchor: match[2],
+			})
+		}
+	}
+
+	return items
+}
+
 // ReadMarkdownFile reads and renders a markdown file
 func ReadMarkdownFile(filePath string) (*NoteData, error) {
 	content, err := os.ReadFile(filePath)
@@ -93,16 +139,29 @@ func ReadMarkdownFile(filePath string) (*NoteData, error) {
 		return nil, err
 	}
 
+	// Extract TOC before rendering
+	toc := ExtractTOC(content)
+
+	// Create parser with extensions for auto heading IDs
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
+	p := parser.NewWithExtensions(extensions)
+
+	// Create renderer with heading IDs enabled
+	htmlFlags := html.CommonFlags
+	opts := html.RendererOptions{Flags: htmlFlags}
+	renderer := html.NewRenderer(opts)
+
 	// Convert markdown to HTML
-	html := markdown.ToHTML(content, nil, nil)
+	htmlContent := markdown.ToHTML(content, p, renderer)
 
 	// Extract title from first heading or use filename
 	title := strings.TrimSuffix(filepath.Base(filePath), filepath.Ext(filePath))
 
 	return &NoteData{
 		Title:   title,
-		Content: template.HTML(html),
+		Content: template.HTML(htmlContent),
 		Path:    GetWebPath(filePath),
+		TOC:     toc,
 	}, nil
 }
 

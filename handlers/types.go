@@ -22,11 +22,18 @@ type NoteItem struct {
 	Children []NoteItem
 }
 
+// TOCItem represents a table of contents entry
+type TOCItem struct {
+	Title string
+	Anchor string
+}
+
 // NoteData represents the data for a specific note
 type NoteData struct {
 	Title   string
 	Content template.HTML
 	Path    string
+	TOC     []TOCItem
 }
 
 // NotesPageData represents the data for the notes page
@@ -56,6 +63,8 @@ type Project struct {
 // Experience represents an experience item
 type Experience struct {
 	Title       string
+	Company     string
+	DateRange   string
 	Description string
 	Link        string
 }
