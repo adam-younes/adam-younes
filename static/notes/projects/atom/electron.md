@@ -10,8 +10,6 @@ Electron is a statically-typed scripting language designed for the Atom game eng
 - **Core:** Data container. Attachable to entities as components.
 - **Shell:** Behavior layer. Stacks onto cores, not entities directly.
 
----
-
 ## Table of Contents
 
 1. [Lexical Structure](#1-lexical-structure)
@@ -30,8 +28,6 @@ Electron is a statically-typed scripting language designed for the Atom game eng
 14. [Standard Library](#14-standard-library)
 15. [Memory Model](#15-memory-model)
 16. [Concurrency Model](#16-concurrency-model)
-
----
 
 ## 1. Lexical Structure
 

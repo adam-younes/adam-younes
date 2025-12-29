@@ -20,14 +20,14 @@ func (h *ExperienceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			Company:     "Mod AI (YC F25)",
 			DateRange:   "August 2025 - Present",
 			Description: "Building AI agents that automate accounts payable workflows, enabling finance teams to process significantly more invoices without adding headcount.",
-			Link:        "https://www.modai.dev/",
+			Link:        "https://www.usemod.ai/",
 		},
 		{
 			Title:       "Software Engineer",
 			Company:     "Nixie Tech",
 			DateRange:   "March - August 2025",
 			Description: "Built digital signage management software for a contracting company.",
-			Link:        "https://nixietech.io/",
+			Link:        "https://nixietech.com/",
 		},
 		{
 			Title:       "Runtime Software Engineer",
