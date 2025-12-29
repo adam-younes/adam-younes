@@ -65,11 +65,16 @@ jobs:
 
       - name: Sync static assets & templates
         run: |
-          rsync -avz --delete --no-group --no-owner \
-            --rsync-path="sudo rsync" \
+          rsync -avz --delete \
             -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
             static templates \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.APP_DIR }}
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/deploy-assets/
+
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "sudo rm -rf ${{ secrets.APP_DIR }}/static ${{ secrets.APP_DIR }}/templates \
+             && sudo mv /tmp/deploy-assets/static /tmp/deploy-assets/templates ${{ secrets.APP_DIR }}/ \
+             && sudo chown -R root:root ${{ secrets.APP_DIR }}/static ${{ secrets.APP_DIR }}/templates"
 
       - name: Deploy binary & set perms
         run: |
