@@ -68,13 +68,7 @@ jobs:
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
             static templates \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/deploy-assets/
-
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "sudo rm -rf ${{ secrets.APP_DIR }}/static ${{ secrets.APP_DIR }}/templates \
-             && sudo mv /tmp/deploy-assets/static /tmp/deploy-assets/templates ${{ secrets.APP_DIR }}/ \
-             && sudo chown -R root:root ${{ secrets.APP_DIR }}/static ${{ secrets.APP_DIR }}/templates"
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.APP_DIR }}/
 
       - name: Deploy binary & set perms
         run: |
