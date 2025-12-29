@@ -6,9 +6,13 @@
 Electron is a statically-typed scripting language designed for the Atom game engine. It features a unique composition-based object model using "cores" (data) and "shells" (behavior) instead of traditional classes, enabling flexible runtime behavior modification through shell stacking.
 
 **Architecture Overview:**
+
 - **Entity:** Opaque engine handle with generation counter. An ID that groups components.
+
 - **Core:** Data container. Attachable to entities as components.
+
 - **Shell:** Behavior layer. Stacks onto cores, not entities directly.
+
 
 ## Table of Contents
 
