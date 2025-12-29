@@ -65,9 +65,9 @@ jobs:
 
       - name: Sync static assets & templates
         run: |
-          rsync -avz \
+          rsync -avz --delete \
             -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
-            static/ templates/ \
+            static templates \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.APP_DIR }}
 
       - name: Deploy binary & set perms
