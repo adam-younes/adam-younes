@@ -19,13 +19,16 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
         <script src="https://unpkg.com/htmx.org@1.9.2"></script>
     </head>
-    <body>
-        <main>
+    <body hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="innerHTML" hx-push-url="true">
+        {{ if .ShowNavbar }}
+        {{ template "navbar" . }}
+        {{ end }}
+        <main id="main-content">
             {{ .Content }}
         </main>
         <script>
-            // Register 'electron' as an alias for 'c' syntax highlighting
-            document.addEventListener('DOMContentLoaded', function() {
+            // Initialize syntax highlighting
+            function initHighlighting() {
                 // Map electron to c language
                 document.querySelectorAll('code.language-electron').forEach(function(block) {
                     block.classList.remove('language-electron');
@@ -33,7 +36,13 @@
                 });
                 // Initialize highlight.js
                 hljs.highlightAll();
-            });
+            }
+
+            // Run on initial page load
+            document.addEventListener('DOMContentLoaded', initHighlighting);
+
+            // Re-run after HTMX content swaps
+            document.addEventListener('htmx:afterSwap', initHighlighting);
         </script>
     </body>
 </html>

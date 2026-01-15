@@ -4,8 +4,9 @@ import "html/template"
 
 // PageData represents the data structure for rendering pages
 type PageData struct {
-	Title   string
-	Content template.HTML
+	Title     string
+	Content   template.HTML
+	ShowNavbar bool
 }
 
 // PageHandler is a generic handler for simple pages

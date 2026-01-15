@@ -26,6 +26,11 @@ func NewRenderer(tmpl *template.Template) *Renderer {
 
 // Render renders a page using the template
 func (r *Renderer) Render(w http.ResponseWriter, contentTmpl, title string, data interface{}) {
+	r.RenderWithNavbar(w, contentTmpl, title, data, true)
+}
+
+// RenderWithNavbar renders a page with optional navbar
+func (r *Renderer) RenderWithNavbar(w http.ResponseWriter, contentTmpl, title string, data interface{}, showNavbar bool) {
 	var buf bytes.Buffer
 	if err := r.tmpl.ExecuteTemplate(&buf, contentTmpl, data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -33,8 +38,9 @@ func (r *Renderer) Render(w http.ResponseWriter, contentTmpl, title string, data
 	}
 
 	pageData := PageData{
-		Title:   title,
-		Content: template.HTML(buf.String()),
+		Title:      title,
+		Content:    template.HTML(buf.String()),
+		ShowNavbar: showNavbar,
 	}
 	if err := r.tmpl.ExecuteTemplate(w, "base", pageData); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

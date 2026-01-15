@@ -90,6 +90,71 @@
     const allNotesView = document.getElementById('all-notes-view');
     const tocView = document.getElementById('toc-view');
 
+    // Folder state caching
+    const FOLDER_STATE_KEY = 'notes-sidebar-folder-state';
+
+    function getFolderState() {
+        try {
+            const state = localStorage.getItem(FOLDER_STATE_KEY);
+            return state ? JSON.parse(state) : {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function saveFolderState(state) {
+        try {
+            localStorage.setItem(FOLDER_STATE_KEY, JSON.stringify(state));
+        } catch (e) {
+            // localStorage may be unavailable
+        }
+    }
+
+    function setFolderExpanded(folderPath, isExpanded) {
+        const state = getFolderState();
+        if (isExpanded) {
+            state[folderPath] = true;
+        } else {
+            delete state[folderPath];
+        }
+        saveFolderState(state);
+    }
+
+    function restoreFolderStates() {
+        const state = getFolderState();
+        document.querySelectorAll('.folder-toggle').forEach(function(btn) {
+            const folderPath = btn.getAttribute('data-folder-path');
+            if (folderPath && state[folderPath]) {
+                const content = btn.nextElementSibling;
+                const chevron = btn.querySelector('.folder-chevron');
+                if (content && content.classList.contains('folder-content')) {
+                    content.classList.remove('hidden');
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(90deg)';
+                    }
+                }
+            }
+        });
+    }
+
+    function restoreFolderStatesFromCache() {
+        const state = getFolderState();
+        document.querySelectorAll('.folder-toggle').forEach(function(btn) {
+            const folderPath = btn.getAttribute('data-folder-path');
+            const content = btn.nextElementSibling;
+            const chevron = btn.querySelector('.folder-chevron');
+            if (content && content.classList.contains('folder-content')) {
+                if (folderPath && state[folderPath]) {
+                    content.classList.remove('hidden');
+                    if (chevron) chevron.style.transform = 'rotate(90deg)';
+                } else {
+                    content.classList.add('hidden');
+                    if (chevron) chevron.style.transform = 'rotate(0deg)';
+                }
+            }
+        });
+    }
+
     // Sidebar toggle functionality
     if (toggleBtn && sidebar) {
         toggleBtn.addEventListener('click', function() {
@@ -124,15 +189,11 @@
             const lowerQuery = query.toLowerCase().trim();
 
             if (!lowerQuery) {
-                // Show all items and collapse folders
+                // Show all items and restore folder states from cache
                 notesTree.querySelectorAll('[data-tree-item]').forEach(item => {
                     item.classList.remove('hidden');
                 });
-                notesTree.querySelectorAll('.folder-content').forEach(folder => {
-                    folder.classList.add('hidden');
-                    const chevron = folder.previousElementSibling?.querySelector('.folder-chevron');
-                    if (chevron) chevron.style.transform = 'rotate(0deg)';
-                });
+                restoreFolderStatesFromCache();
                 return;
             }
 
@@ -237,20 +298,26 @@
         btn.addEventListener('click', function() {
             const content = btn.nextElementSibling;
             const chevron = btn.querySelector('.folder-chevron');
+            const folderPath = btn.getAttribute('data-folder-path');
 
             if (content && content.classList.contains('folder-content')) {
                 content.classList.toggle('hidden');
+                const isExpanded = !content.classList.contains('hidden');
 
                 if (chevron) {
-                    if (content.classList.contains('hidden')) {
-                        chevron.style.transform = 'rotate(0deg)';
-                    } else {
-                        chevron.style.transform = 'rotate(90deg)';
-                    }
+                    chevron.style.transform = isExpanded ? 'rotate(90deg)' : 'rotate(0deg)';
+                }
+
+                // Save folder state to cache
+                if (folderPath) {
+                    setFolderExpanded(folderPath, isExpanded);
                 }
             }
         });
     });
+
+    // Restore folder states from cache on page load
+    restoreFolderStates();
 })();
 </script>
 {{ end }}
@@ -260,7 +327,7 @@
 <div class="text-[var(--color-text-secondary)] relative" data-tree-item="{{ .Name }}">
     {{ if .IsDir }}
     <!-- Directory -->
-    <button class="folder-toggle flex items-center space-x-2 py-1 w-full text-left hover:text-[var(--color-text-primary)] transition-colors" type="button">
+    <button class="folder-toggle flex items-center space-x-2 py-1 w-full text-left hover:text-[var(--color-text-primary)] transition-colors" type="button" data-folder-path="{{ .Path }}">
         <span class="tree-connector hidden shrink-0 w-3 h-3 border-b border-l border-[var(--color-border-primary)] rounded-bl -ml-3"></span>
         <svg class="folder-chevron shrink-0 w-3 h-3 text-[var(--color-text-secondary)] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>

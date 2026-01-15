@@ -14,6 +14,6 @@ func NewHomeHandler(renderer *Renderer) *HomeHandler {
 
 // ServeHTTP implements the http.Handler interface
 func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.renderer.Render(w, "indexContent", "Home", nil)
+	h.renderer.RenderWithNavbar(w, "indexContent", "Home", nil, false)
 }
 
