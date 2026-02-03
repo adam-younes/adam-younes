@@ -6,10 +6,15 @@ Every night, the player clocks in to work. Starting their shift at the wheel, th
 
 ### Interactables
 The car's interior is the main setting for the game.
+
 - There is a rearview mirror that the player can look at to see the backseat and behind the car.
+
 - There are side view mirrors that the player can look at to see to the sides and behind the car.
+
 - There is a windshield mounted phone that can display the rideshare app and a GPS.
+
 - There is a gear shift and a steering wheel that the user must control most of the time.
+
 
 ### UI/HUD
 There is no HUD for in game actions, instead, all game mechanics related to driving are controlled and monitored via. the car's dashboard and the phone's screen.
