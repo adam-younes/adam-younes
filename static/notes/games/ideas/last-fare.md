@@ -38,21 +38,30 @@ The rearview mirror is the central tension mechanic—the equivalent of the docu
 
 ### Attention Tax
 Looking in the mirror too long causes the car to drift lanes or miss turns. Not looking means missing critical passenger behaviors:
+
 - Someone reaching into a bag
+
 - A hand moving toward the door handle at speed
+
 - A face that doesn't match the profile photo
 
 The player should constantly feel torn between two competing surveillance tasks, and the game punishes neglecting either one.
 
 ### Passenger Body Language System
 Passengers communicate through behavior, not dialogue. Over time, players develop literacy in micro-behaviors—some benign, some threats:
+
 - A passenger bouncing their knee: anxiety or impatience
+
 - Someone glancing repeatedly out the rear window: possibly being followed
+
 - A passenger putting on gloves mid-ride: alarming signal
+
 - Fidgeting with a bag or pocket
 
 Misreading behaviors has consequences in both directions:
+
 - Kicking out a nervous but harmless passenger tanks your rating
+
 - Ignoring a genuine threat gets you hurt
 
 ---
@@ -63,26 +72,37 @@ The phone is the player's multi-document workspace—the thing that creates cogn
 
 ### Rideshare App
 Shows limited passenger info before acceptance:
+
 - Name, photo, rating
+
 - Pickup pin location
+
 - Destination
 
 Players learn to read this information like documents:
+
 - A 4.2-star passenger requesting pickup from a known bad intersection at 2 AM is a different calculus than a 4.9-star from a hotel lobby
+
 - Rider notes that sometimes contradict what the passenger actually says or does ("going to the airport" but the pin is in a residential dead-end)
 
 ### Notifications & Messages
 A message/notification layer creates personal pressure competing for attention:
+
 - Texts from a landlord about rent
+
 - A family member asking when you'll be done
+
 - News notifications about something happening in your driving area
 
 These compete for attention exactly when focus is needed on driving or watching the passenger. This is the equivalent of Papers, Please's ticking clock and family expenses screen—the squeeze from both sides.
 
 ### GPS Manipulation
 Passengers can attempt to manipulate routing:
+
 - "Hey, take a left here, I know a shortcut."
+
 - Do you follow the GPS or the passenger's instructions?
+
 - Following might be a genuine shortcut—or routing you somewhere isolated
 
 This is a trust mechanic that escalates over the course of the game.
@@ -92,9 +112,13 @@ This is a trust mechanic that escalates over the course of the game.
 ## Car Degradation
 
 The car is the workspace and it decays under neglect:
+
 - Gas levels requiring stops
+
 - Tire wear affecting handling
+
 - Check engine light growing more urgent
+
 - Cracked windshield from incidents obscuring vision until repaired
 
 Maintenance costs money, creating another pressure point.
@@ -104,8 +128,11 @@ Maintenance costs money, creating another pressure point.
 ## Tips as Moral Lever
 
 Certain passengers tip well if you comply with their requests:
+
 - Take the weird route
+
 - Don't ask questions
+
 - "Forget" what you saw
 
 The game makes it financially painful to be ethical.
@@ -126,8 +153,11 @@ They get in and immediately ask to go somewhere different than the app says.
 The app says one rider, but two people approach the car.
 
 ### Pattern Recognition
+
 - Repeat pickup locations the player learns to recognize
+
 - Mental or physical blacklist the player builds
+
 - Crude notes system on the phone to flag addresses or names—a personal border inspector stamp book
 
 ---
@@ -137,14 +167,20 @@ The app says one rider, but two people approach the car.
 Passengers leave things in the car: a phone, a wallet, a bag.
 
 ### Choices
+
 - **Return it**: Costs time, might earn a reward
+
 - **Keep it**: Some items have value or information
+
 - **Ignore it**: Move on, but consequences may follow
 
 ### Evidence Items
 Some items are dangerous—a bag with something you shouldn't have seen, a phone buzzing with revealing messages. Suddenly you're holding something incriminating and must decide:
+
 - Turn it in? To whom?
+
 - The cops might ask questions you don't want to answer
+
 - The passenger might come looking for it
 
 ### Contraband Mechanic
@@ -155,20 +191,30 @@ A passenger asks you to hold onto something or deliver something. You don't know
 ## Atmosphere & World Building
 
 ### Police Scanner / Local Radio
+
 Plays during drives, serving double duty:
+
 - Builds atmosphere
+
 - Delivers information for piecing together the larger story:
+
   - A missing persons report matching a passenger from last night
+
   - A crime at an address you just dropped someone at
+
   - A description of a suspect vehicle that sounds like yours
 
 Players passively absorb narrative through audio while actively managing driving and passenger interaction—three layers of attention.
 
 ### City Evolution
 The same streets feel different as in-game weeks pass:
+
 - More police presence, or less
+
 - Certain areas cordoned off
+
 - A building that burned down
+
 - The city changes in response to events the player may or may not have influenced
 
 ---
@@ -179,9 +225,13 @@ The same streets feel different as in-game weeks pass:
 News reports emerge about a rideshare driver involved in something terrible—assaults, disappearances, escalating incidents. Descriptions are vague but details rhyme uncomfortably with your situation: same car color, same operating area, same hours. Passengers act nervous. The police scanner mentions your neighborhood.
 
 Possible directions:
+
 - You're being framed by someone who knows your patterns
+
 - There IS another driver and you're converging toward confronting them
+
 - Unreliable narrator reveal: the player character IS the other driver, and the game has shown evidence all along of dissociation or blackouts
+
 
 ### Option 2: The Passenger Who Knows You
 A recurring thread across multiple nights: a passenger (different accounts, or the same one) who knows things they shouldn't—your real name, where you live, what happened on a previous shift. They're pleasant, they tip well, and they're terrifying. They never threaten directly. They just know. The player must figure out who this person is and what they want, with the answer tying into the larger plot.
