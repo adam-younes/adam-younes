@@ -25,6 +25,11 @@ func (h *ProjectsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			Description: "A Linux based Wayland game engine",
 			Link:        "https://github.com/adam-younes/atom",
 		},
+		{
+			Title:       "last-fare",
+			Description: "A thriller driving simulator about a rideshare driver completing their shift night after night, inspired by Papers, Please. Built with Godot 4.5",
+			Link:        "https://github.com/adam-younes/last-fare",
+		},
 	}
 
 	data := ProjectsPageData{Projects: projects}
