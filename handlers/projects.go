@@ -30,6 +30,11 @@ func (h *ProjectsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			Description: "A thriller driving simulator about a rideshare driver completing their shift night after night, inspired by Papers, Please. Built with Godot 4.5",
 			Link:        "https://github.com/adam-younes/last-fare",
 		},
+		{
+			Title:       "qbtimer",
+			Description: "A competition-grade Rubik's Cube timer with automatic scramble generation for 2x2-5x5, solve tracking, and user accounts. Built with React, Express, Go, and PostgreSQL",
+			Link:        "https://qbtimer.com",
+		},
 	}
 
 	data := ProjectsPageData{Projects: projects}
