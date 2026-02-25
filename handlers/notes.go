@@ -6,16 +6,52 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
+	"time"
 )
 
 // NotesHandler handles the notes page
 type NotesHandler struct {
-	renderer *Renderer
+	renderer  *Renderer
+	mu        sync.RWMutex
+	cache     []NoteItem
+	cacheTime time.Time
+	cacheTTL  time.Duration
 }
 
 // NewNotesHandler creates a new notes handler
 func NewNotesHandler(renderer *Renderer) *NotesHandler {
-	return &NotesHandler{renderer: renderer}
+	return &NotesHandler{
+		renderer: renderer,
+		cacheTTL: 5 * time.Minute,
+	}
+}
+
+// getItems returns the cached notes tree, refreshing if expired.
+func (h *NotesHandler) getItems(notesDir string) ([]NoteItem, error) {
+	h.mu.RLock()
+	if h.cache != nil && time.Since(h.cacheTime) < h.cacheTTL {
+		items := h.cache
+		h.mu.RUnlock()
+		return items, nil
+	}
+	h.mu.RUnlock()
+
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	// Double-check after acquiring write lock
+	if h.cache != nil && time.Since(h.cacheTime) < h.cacheTTL {
+		return h.cache, nil
+	}
+
+	items, err := ScanNotesDirectory(notesDir)
+	if err != nil {
+		return nil, err
+	}
+	h.cache = items
+	h.cacheTime = time.Now()
+	return items, nil
 }
 
 // ServeHTTP implements the http.Handler interface
@@ -26,12 +62,12 @@ func (h *NotesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// Handle search query
 	searchQuery := r.URL.Query().Get("search")
 
-	// Scan the notes directory
+	// Scan the notes directory (cached)
 	notesDir := "static/notes"
-	items, err := ScanNotesDirectory(notesDir)
+	items, err := h.getItems(notesDir)
 	if err != nil {
 		log.Printf("Error scanning notes directory: %v", err)
-		http.Error(w, "Error reading notes", http.StatusInternalServerError)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
@@ -41,12 +77,29 @@ func (h *NotesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if requestPath != "" && requestPath != "/" {
 		filePath := filepath.Join(notesDir, requestPath)
 
+		// Prevent path traversal: ensure resolved path stays within notesDir
+		absNotes, err := filepath.Abs(notesDir)
+		if err != nil {
+			log.Printf("Error resolving notes directory: %v", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+		absFile, err := filepath.Abs(filePath)
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+		if !strings.HasPrefix(absFile, absNotes+string(os.PathSeparator)) {
+			http.NotFound(w, r)
+			return
+		}
+
 		// Check if file exists and is a markdown file
 		if info, err := os.Stat(filePath); err == nil && !info.IsDir() && strings.HasSuffix(filePath, ".md") {
 			noteData, err := ReadMarkdownFile(filePath)
 			if err != nil {
 				log.Printf("Error reading markdown file: %v", err)
-				http.Error(w, "Error reading note", http.StatusInternalServerError)
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 				return
 			}
 			currentNote = noteData

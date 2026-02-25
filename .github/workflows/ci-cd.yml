@@ -66,30 +66,30 @@ jobs:
       - name: Sync static assets & templates
         run: |
           rsync -avz --delete \
-            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            -e "ssh -i ~/.ssh/id_rsa" \
             static templates \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.APP_DIR }}/
 
       - name: Deploy binary & set perms
         run: |
-          scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+          scp -i ~/.ssh/id_rsa \
             adam-younes \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/tmp/adam-younes.new
 
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/id_rsa \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             "sudo mv /tmp/adam-younes.new /usr/local/bin/adam-younes \
              && sudo chmod +x /usr/local/bin/adam-younes"
 
       - name: Restart Go service on server
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/id_rsa \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             "sudo systemctl restart adam-younes"
 
       - name: Reload Caddy to pick up any config or static changes
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/id_rsa \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             "sudo systemctl reload caddy"
 

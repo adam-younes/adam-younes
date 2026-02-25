@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/adam-younes/adam-younes/handlers"
 )
@@ -29,7 +30,7 @@ func init() {
 
 	// Create template with custom functions
 	tmpl = template.Must(template.New("").Funcs(template.FuncMap{
-		"getWebPath": handlers.GetWebPath,
+		"getWebPath":      handlers.GetWebPath,
 		"getRelativePath": handlers.GetRelativePath,
 	}).ParseFS(
 		tplFS,
@@ -39,7 +40,17 @@ func init() {
 	))
 }
 
-
+// fileServerNoDir wraps http.FileServer to disable directory listings.
+func fileServerNoDir(fsys http.FileSystem) http.Handler {
+	server := http.FileServer(fsys)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if strings.HasSuffix(r.URL.Path, "/") {
+			http.NotFound(w, r)
+			return
+		}
+		server.ServeHTTP(w, r)
+	})
+}
 
 func main() {
 	mux := http.NewServeMux()
@@ -47,7 +58,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.FS(staticFS))))
+	mux.Handle("/static/", http.StripPrefix("/static/", fileServerNoDir(http.FS(staticFS))))
 
 	// Create renderer
 	renderer := handlers.NewRenderer(tmpl)
@@ -67,13 +78,17 @@ func main() {
 	mux.HandleFunc("/notes", notesHandler.ServeHTTP)
 	mux.HandleFunc("/notes/", notesHandler.ServeHTTP)
 
-	// redirects
-	mux.Handle("/experience/", http.StripPrefix("/experience/", mux))
-	mux.Handle("/projects/", http.StripPrefix("/projects/", mux))
-	mux.Handle("/about/", http.StripPrefix("/about/", mux))
+	// Trailing-slash redirects (instead of route aliasing)
+	mux.HandleFunc("/experience/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/experience", http.StatusMovedPermanently)
+	})
+	mux.HandleFunc("/projects/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/projects", http.StatusMovedPermanently)
+	})
+	mux.HandleFunc("/about/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/about", http.StatusMovedPermanently)
+	})
 
 	log.Println("Listening on :9999")
-	log.Fatal(http.ListenAndServe(":9999", mux))
+	log.Fatal(http.ListenAndServe(":9999", handlers.SecurityHeaders(handlers.MethodGet(mux))))
 }
-
-

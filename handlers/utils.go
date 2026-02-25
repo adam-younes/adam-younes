@@ -3,6 +3,7 @@ package handlers
 import (
 	"bytes"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -12,6 +13,7 @@ import (
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
+	"github.com/microcosm-cc/bluemonday"
 )
 
 // Renderer handles template rendering
@@ -33,7 +35,8 @@ func (r *Renderer) Render(w http.ResponseWriter, contentTmpl, title string, data
 func (r *Renderer) RenderWithNavbar(w http.ResponseWriter, contentTmpl, title string, data interface{}, showNavbar bool) {
 	var buf bytes.Buffer
 	if err := r.tmpl.ExecuteTemplate(&buf, contentTmpl, data); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("template render error: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
@@ -43,7 +46,8 @@ func (r *Renderer) RenderWithNavbar(w http.ResponseWriter, contentTmpl, title st
 		ShowNavbar: showNavbar,
 	}
 	if err := r.tmpl.ExecuteTemplate(w, "base", pageData); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		log.Printf("base template error: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
 
@@ -157,8 +161,10 @@ func ReadMarkdownFile(filePath string) (*NoteData, error) {
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
 
-	// Convert markdown to HTML
+	// Convert markdown to HTML and sanitize
 	htmlContent := markdown.ToHTML(content, p, renderer)
+	sanitizer := bluemonday.UGCPolicy()
+	htmlContent = sanitizer.SanitizeBytes(htmlContent)
 
 	// Extract title from first heading or use filename
 	title := strings.TrimSuffix(filepath.Base(filePath), filepath.Ext(filePath))
