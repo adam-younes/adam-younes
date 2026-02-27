@@ -15,6 +15,10 @@ run: build
 	@echo "Starting tailwindcss watch"
 	@npx @tailwindcss/cli -i ./static/css/style.css -o ./static/css/output.css --watch
 
+# Build minified CSS for production
+build-css:
+	npx @tailwindcss/cli -i ./static/css/style.css -o ./static/css/output.css --minify
+
 # Clean up the binary
 clean:
 	@echo "Cleaning..."

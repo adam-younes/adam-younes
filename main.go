@@ -40,6 +40,14 @@ func init() {
 	))
 }
 
+// cacheControl sets Cache-Control headers for static assets.
+func cacheControl(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "public, max-age=86400")
+		next.ServeHTTP(w, r)
+	})
+}
+
 // fileServerNoDir wraps http.FileServer to disable directory listings.
 func fileServerNoDir(fsys http.FileSystem) http.Handler {
 	server := http.FileServer(fsys)
@@ -58,7 +66,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	mux.Handle("/static/", http.StripPrefix("/static/", fileServerNoDir(http.FS(staticFS))))
+	mux.Handle("/static/", cacheControl(http.StripPrefix("/static/", fileServerNoDir(http.FS(staticFS)))))
 
 	// Create renderer
 	renderer := handlers.NewRenderer(tmpl)
@@ -69,6 +77,10 @@ func main() {
 	projectsHandler := handlers.NewProjectsHandler(renderer)
 	experienceHandler := handlers.NewExperienceHandler(renderer)
 	notesHandler := handlers.NewNotesHandler(renderer)
+
+	// SEO routes
+	mux.HandleFunc("/robots.txt", handlers.RobotsTxt)
+	mux.HandleFunc("/sitemap.xml", handlers.SitemapXML)
 
 	// Register routes
 	mux.Handle("/", homeHandler)

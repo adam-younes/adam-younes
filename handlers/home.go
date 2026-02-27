@@ -14,6 +14,10 @@ func NewHomeHandler(renderer *Renderer) *HomeHandler {
 
 // ServeHTTP implements the http.Handler interface
 func (h *HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.renderer.RenderWithNavbar(w, "indexContent", "Home", nil, false)
+	h.renderer.RenderWithNavbar(w, "indexContent",
+		"Adam Younes",
+		"Adam Younes — Palestinian software engineer. Founding engineer at Mod AI (YC F25). Projects, experience, and notes.",
+		"/",
+		nil, false)
 }
 

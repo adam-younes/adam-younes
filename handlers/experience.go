@@ -39,5 +39,9 @@ func (h *ExperienceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := ExperiencePageData{Experience: experience}
-	h.renderer.Render(w, "experienceContent", "Experience", data)
+	h.renderer.Render(w, "experienceContent",
+		"Experience - Adam Younes",
+		"Professional experience of Adam Younes — Founding Software Engineer at Mod AI (YC F25), Nixie Tech, and Aechelon Technology.",
+		"/experience",
+		data)
 }

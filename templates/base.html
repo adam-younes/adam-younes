@@ -4,8 +4,26 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Adam Younes</title>
-        <!-- google fonts -->
+        <title>{{ .Title }}</title>
+        <meta name="description" content="{{ .Description }}">
+        <meta name="author" content="Adam Younes">
+        <link rel="canonical" href="https://adamyounes.com{{ .Path }}">
+        <!-- Open Graph -->
+        <meta property="og:title" content="{{ .Title }}">
+        <meta property="og:description" content="{{ .Description }}">
+        <meta property="og:url" content="https://adamyounes.com{{ .Path }}">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="Adam Younes">
+        <meta property="og:image" content="https://adamyounes.com/static/assets/og-image.png">
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content="{{ .Title }}">
+        <meta name="twitter:description" content="{{ .Description }}">
+        <meta name="twitter:image" content="https://adamyounes.com/static/assets/og-image.png">
+        <!-- Favicon -->
+        <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/static/assets/favicon.png" type="image/png">
+        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
@@ -16,8 +34,36 @@
         <link rel="stylesheet" href="/static/css/output.css">
         <!-- Syntax highlighting -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" integrity="sha384-oaMLBGEzBOJx3UHwac0cVndtX5fxGQIfnAeFZ35RTgqPcYlbprH9o9PUV/F8Le07" crossorigin="anonymous">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-SDoiYpX0Rds2uJxGagpIgvo8MRGg5n25bu3kbfNTWBJfryGubn1FzSa+q15lOiTt" crossorigin="anonymous"></script>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" integrity="sha384-F/bZzf7p3Joyp5psL90p/p89AZJsndkSoGwRpXcZhleCWhd8SnRuoYo4d0yirjJp" crossorigin="anonymous"></script>
+        <script defer src="https://unpkg.com/htmx.org@1.9.12" integrity="sha384-SDoiYpX0Rds2uJxGagpIgvo8MRGg5n25bu3kbfNTWBJfryGubn1FzSa+q15lOiTt" crossorigin="anonymous"></script>
+        <!-- Structured Data -->
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "name": "Adam Younes",
+              "url": "https://adamyounes.com"
+            },
+            {
+              "@type": "Person",
+              "name": "Adam Younes",
+              "url": "https://adamyounes.com",
+              "jobTitle": "Software Engineer",
+              "description": "Palestinian software engineer. Founding engineer at Mod AI (YC F25).",
+              "sameAs": [
+                "https://github.com/adam-younes"
+              ],
+              "worksFor": {
+                "@type": "Organization",
+                "name": "Mod AI",
+                "url": "https://www.usemod.ai/"
+              }
+            }
+          ]
+        }
+        </script>
     </head>
     <body hx-boost="true" hx-target="#main-content" hx-select="#main-content" hx-swap="innerHTML" hx-push-url="true">
         {{ if .ShowNavbar }}

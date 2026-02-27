@@ -38,5 +38,9 @@ func (h *ProjectsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := ProjectsPageData{Projects: projects}
-	h.renderer.Render(w, "projectsContent", "My Projects", data)
+	h.renderer.Render(w, "projectsContent",
+		"Projects - Adam Younes",
+		"Software projects by Adam Younes — graphing calculator in C, Wayland game engine, driving simulator, and Rubik's Cube timer.",
+		"/projects",
+		data)
 }

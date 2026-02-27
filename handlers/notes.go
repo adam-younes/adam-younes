@@ -117,7 +117,17 @@ func (h *NotesHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		SearchQuery: searchQuery,
 	}
 
+	// Build SEO fields based on whether a specific note is being viewed
+	title := "Notes - Adam Younes"
+	description := "Technical notes and documentation by Adam Younes."
+	path := "/notes"
+	if currentNote != nil {
+		title = currentNote.Title + " - Adam Younes"
+		description = currentNote.Title + " — technical notes by Adam Younes."
+		path = currentNote.Path
+	}
+
 	// Render the notes page
-	h.renderer.Render(w, "notesContent", "Notes", data)
+	h.renderer.Render(w, "notesContent", title, description, path, data)
 }
 

@@ -14,6 +14,10 @@ func NewAboutHandler(renderer *Renderer) *AboutHandler {
 
 // ServeHTTP implements the http.Handler interface
 func (h *AboutHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.renderer.Render(w, "aboutContent", "About Me", nil)
+	h.renderer.Render(w, "aboutContent",
+		"About - Adam Younes",
+		"About Adam Younes, a Palestinian software engineer. Founding engineer at Mod AI (YC F25), previously at Nixie Tech and Aechelon Technology.",
+		"/about",
+		nil)
 }
 
