@@ -26,9 +26,9 @@ func (h *ProjectsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			Link:        "https://github.com/adam-younes/atom",
 		},
 		{
-			Title:       "last-fare",
-			Description: "A thriller driving simulator about a rideshare driver completing their shift night after night, inspired by Papers, Please. Built with Godot 4.5",
-			Link:        "/notes/games/ideas/last-fare.md",
+			Title:       "night-shift",
+			Description: "A rideshare driver simulation thriller about moral compromise under financial pressure. An immigrant driver is drawn into the operations of a cartel, one small compromise at a time. Built with Godot 4.5",
+			Link:        "/notes/games/ideas/night-shift.md",
 		},
 		{
 			Title:       "qbtimer",
@@ -40,7 +40,7 @@ func (h *ProjectsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	data := ProjectsPageData{Projects: projects}
 	h.renderer.Render(w, "projectsContent",
 		"Projects - Adam Younes",
-		"Software projects by Adam Younes — graphing calculator in C, Wayland game engine, driving simulator, and Rubik's Cube timer.",
+		"Software projects by Adam Younes — graphing calculator in C, Wayland game engine, rideshare thriller game, and Rubik's Cube timer.",
 		"/projects",
 		data)
 }
