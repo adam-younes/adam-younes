@@ -28,7 +28,7 @@ func (h *ProjectsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		{
 			Title:       "last-fare",
 			Description: "A thriller driving simulator about a rideshare driver completing their shift night after night, inspired by Papers, Please. Built with Godot 4.5",
-			Link:        "https://github.com/adam-younes/last-fare",
+			Link:        "/notes/games/ideas/last-fare.md",
 		},
 		{
 			Title:       "qbtimer",
